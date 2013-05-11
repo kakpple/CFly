@@ -20,7 +20,7 @@ public class GameScreen extends Screen {
 	private enum GameState {
 		Ready, Running, Paused, GameOver
 	}
-	private GameState state = GameState.Ready;
+	private GameState state = GameState.Running;
 
 	// Variable Setup
 	private static Background bg1;
@@ -131,7 +131,7 @@ public class GameScreen extends Screen {
 	
 	// kakpple test, shootingInterval
 	int shootingInterval = 0;
-	
+	int lastX = 0;
 	private void updateRunning(List<TouchEvent> touchEvents, float deltaTime) {
 		// This is identical to the update() method from our Unit 2/3 game.
 		// 1. All touch input is handled here:
@@ -139,40 +139,31 @@ public class GameScreen extends Screen {
 		for (int i = 0; i < len; i++) {
 			TouchEvent event = touchEvents.get(i);
 			/*
-			if (event.type == TouchEvent.TOUCH_DOWN) {					
-				if (event.x > 240) {
-					// Move right.
-					robot.moveRight();
-					robot.setMovingRight(true);
-				} else if (event.x <= 240) {
-					robot.moveLeft();
-					robot.setMovingLeft(true);
-				}
-			}
-
-			if (event.type == TouchEvent.TOUCH_UP) {
-
-				if (inBounds(event, 0, 0, 35, 35)) {
-					pause();
-				}
-
-				if (event.x > 240) {
-					robot.stopRight();
-				} else if (event.x <=240) {
-					robot.stopLeft();
-				} else {
-					if (DEBUG) Log.d(TAG, "neither event.x>240 nor event.x<=240");
-				}
-			}
-		*/
 			if (event.type == TouchEvent.TOUCH_DRAGGED) {					
+				
+				if (event.x > lastX) {
+					robot.moveRight();
+					Log.d(TAG, "kakpple, moveRignt()," + "lastX:" + lastX + "event.x:" + "event.x:" + event.x + "robot.getCenterX():" + robot.getCenterX());
+				} else if (event.x < lastX) {
+					robot.moveLeft();
+					Log.d(TAG, "kakpple, moveLeft()," + "lastX:" + lastX + "event.x:" + event.x + "robot.getCenterX():" + robot.getCenterX());
+				}
+			}
+			
+			lastX = event.x;
+			*/
+			
+			if (event.type == TouchEvent.TOUCH_DRAGGED) {					
+								
 				if (event.x > robot.getCenterX() + robot.MOVE_SPEED_X) {
 					robot.moveRight();
+					Log.d(TAG, "kakpple, moveRignt()," + "event.x:" + event.x + "robot.getCenterX():" + robot.getCenterX());
 				} else if (event.x <= robot.getCenterX() - robot.MOVE_SPEED_X) {
 					robot.moveLeft();
+					Log.d(TAG, "kakpple, moveLeft()," + "event.x:" + event.x + "robot.getCenterX():" + robot.getCenterX());
 				}
 			}
-
+			
 			if (event.type == TouchEvent.TOUCH_UP) {
 				if (inBounds(event, 0, 0, 35, 35)) {
 					pause();
@@ -330,7 +321,7 @@ public class GameScreen extends Screen {
 		Graphics g = game.getGraphics();
 
 		g.drawARGB(155, 0, 0, 0);
-		g.drawString("Tap to Start.", 400, 240, paint);
+		g.drawString("Tap to Start.", 240, 400, paint);
 
 	}
 
